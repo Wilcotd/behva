@@ -1,0 +1,32 @@
+{
+  "userStatus": "member",
+  "clubName": "Old Timer Club",
+  "otherClub": "",
+  "behvaRefNumber": "123456",
+  "contractType": "new",
+  "vehicleOrContractNumber": "",
+  "vehicleType": "car",
+  "registrationStatus": "registered",
+  "registrationNumber": "1-ABC-123",
+  "plateType": "normal",
+  "plateFormat": "rectangular",
+  "brand": "Porsche",
+  "model": "911",
+  "chassisNumber": "WP0ZZZ99Z1S600000",
+  "firstRegistrationDate": "1990-01-01T00:00:00.000Z",
+  "powerKw": 184,
+  "coverages": {
+    "rc": true,
+    "omnium": false,
+    "assistance": true,
+    "legalProtection": false,
+    "driverProtection": false,
+    "fireTheftResting": false,
+    "assistancePlus": false
+  },
+  "firstName": "Jean",
+  "lastName": "Dupont",
+  "email": "jean.dupont@example.com",
+  "phone": "+32 470 00 00 00",
+  "estimatedPremium": 150.00
+}
