@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createFormSchema, FormData, defaultValues } from "@/lib/types";
+import { createFormSchema, FormData, defaultValues, vehicleTypes } from "@/lib/types";
 import { Card } from "@/components/ui/card";
 import { Step1User } from "./Step1User";
 import { Step2Vehicle } from "./Step2Vehicle";
@@ -15,7 +15,11 @@ import { Form } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/components/LanguageProvider";
 
-export function Calculator() {
+interface CalculatorProps {
+  searchParams?: URLSearchParams;
+}
+
+export function Calculator({ searchParams }: CalculatorProps) {
   const { t } = useTranslation();
   const formSchema = useMemo(() => createFormSchema(t), [t]);
   const [currentStep, setCurrentStep] = useState(0);
@@ -33,6 +37,43 @@ export function Calculator() {
     defaultValues,
     mode: "onChange", // Validate on change for real-time feedback
   });
+
+  useEffect(() => {
+    if (searchParams) {
+      const clubMember = searchParams.get("Lid van een club");
+      if (clubMember) {
+        form.setValue("userStatus", clubMember.startsWith("Ja") ? "member" : "not_member");
+      }
+
+      const vehicleType = searchParams.get("Type voertuign");
+      if (vehicleType) {
+        const vehicle = vehicleType.split("|")[0].toLowerCase();
+        if (vehicleTypes.includes(vehicle as any)) {
+          form.setValue("vehicleType", vehicle as any);
+        }
+      }
+
+      const firstName = searchParams.get("Voornaam");
+      if (firstName) {
+        form.setValue("firstName", firstName);
+      }
+
+      const lastName = searchParams.get("Naam");
+      if (lastName) {
+        form.setValue("lastName", lastName);
+      }
+
+      const email = searchParams.get("E-mail");
+      if (email) {
+        form.setValue("email", email);
+      }
+
+      const phone = searchParams.get("Telefoonnummer");
+      if (phone) {
+        form.setValue("phone", phone);
+      }
+    }
+  }, [searchParams, form]);
 
   const nextStep = async () => {
     let isValid = false;

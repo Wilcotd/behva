@@ -55,7 +55,7 @@ export function Step2Vehicle({ form }: StepProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>{t.fields.vehicleType.label}</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue
