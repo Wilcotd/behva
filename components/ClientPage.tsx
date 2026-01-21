@@ -9,10 +9,10 @@ function Content() {
   const { t } = useTranslation();
 
   return (
-    <main className="min-h-screen bg-background font-body py-8">
+    <main className="font-body py-8">
       <div className="container mx-auto px-4 mb-8">
         <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-          <LanguageSwitcher />
+          {/* <LanguageSwitcher /> */}
         </div>
         <Calculator />
       </div>
