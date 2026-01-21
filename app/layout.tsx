@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import Script from "next/script";
 import "./globals.css";
 
 const mabryPro = localFont({
@@ -46,6 +47,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" suppressHydrationWarning>
+      <head>
+        <Script
+          src="https://roguemark.piexels.co/injector.js"
+          strategy="beforeInteractive"
+        />
+      </head>
       <body
         className={`${mabryPro.variable} ${gtAlpina.variable} font-body antialiased`}
         suppressHydrationWarning
