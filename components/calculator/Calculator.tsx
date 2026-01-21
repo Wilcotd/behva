@@ -15,10 +15,40 @@ import { Form } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/components/LanguageProvider";
 
-export function Calculator() {
+export function Calculator({
+  prefilledData,
+}: {
+  prefilledData?: Record<string, string>;
+}) {
   const { t } = useTranslation();
   const formSchema = useMemo(() => createFormSchema(t), [t]);
   const [currentStep, setCurrentStep] = useState(0);
+
+  const fieldMapping: Record<string, string> = {
+    "Type voertuign": "vehicleType",
+    "Datum eerste ingebruikname": "firstRegistrationDate",
+    "Lid van een club": "isClubMember",
+    Voornaam: "firstName",
+    Naam: "lastName",
+    "E-mail": "email",
+    Telefoonnummer: "phoneNumber",
+  };
+
+  const transformedPrefilledData = useMemo(() => {
+    if (!prefilledData) return {};
+    const transformed: Record<string, unknown> = {};
+    for (const key in prefilledData) {
+      const newKey = fieldMapping[key.replace(/\+/g, " ")] || key;
+      const value = prefilledData[key];
+      if (value.includes("|")) {
+        const [label, val] = value.split("|");
+        transformed[newKey] = { label, value: val };
+      } else {
+        transformed[newKey] = value;
+      }
+    }
+    return transformed;
+  }, [prefilledData]);
 
   const steps = [
     { id: "user", title: t.steps.user },
@@ -30,7 +60,10 @@ export function Calculator() {
   const form = useForm<FormData>({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(formSchema) as any,
-    defaultValues,
+    defaultValues: {
+      ...defaultValues,
+      ...transformedPrefilledData,
+    },
     mode: "onChange", // Validate on change for real-time feedback
   });
 
