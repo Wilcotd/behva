@@ -90,9 +90,6 @@ export const createFormSchema = (t: Dictionary) => z.object({
   // Step 4: Contact
   firstName: z.string().min(1, t.validation.firstNameRequired),
   lastName: z.string().min(1, t.validation.lastNameRequired),
-  birthDate: z.date({
-    message: t.validation.dateRequired,
-  }),
   email: z.string().min(1, t.validation.emailRequired).email(t.validation.emailInvalid),
   phone: z.string().optional(),
 });

@@ -39,7 +39,6 @@ export function Step4Summary({ form }: StepProps) {
     const isValid = await form.trigger([
       "firstName",
       "lastName",
-      "birthDate",
       "email",
       "phone",
     ]);
@@ -186,9 +185,9 @@ export function Step4Summary({ form }: StepProps) {
                 name="lastName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t.contact.lastName.label}</FormLabel>
+                    <FormLabel>{t.contact.lastName}</FormLabel>
                     <FormControl>
-                      <Input placeholder={t.contact.lastName.placeholder} {...field} />
+                      <Input placeholder="Dupont" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -199,10 +198,10 @@ export function Step4Summary({ form }: StepProps) {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t.contact.email.label}</FormLabel>
+                    <FormLabel>{t.contact.email}</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder={t.contact.email.placeholder}
+                        placeholder="jean.dupont@example.com"
                         type="email"
                         {...field}
                       />

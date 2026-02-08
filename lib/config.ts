@@ -160,18 +160,8 @@ export const dictionary = {
     },
     contact: {
       firstName: "Prénom",
-      lastName: {
-        label: "Nom",
-        placeholder: "Dupont",
-      },
-      birthDate: {
-        label: "Date de naissance",
-        placeholder: "JJ/MM/AAAA",
-      },
-      email: {
-        label: "Email",
-        placeholder: "jean.dupont@exemple.com",
-      },
+      lastName: "Nom",
+      email: "Email",
       phone: "Téléphone (optionnel)",
     },
     warnings: {
@@ -387,18 +377,8 @@ export const dictionary = {
     },
     contact: {
       firstName: "First Name",
-      lastName: {
-        label: "Last Name",
-        placeholder: "Doe",
-      },
-      birthDate: {
-        label: "Date of Birth",
-        placeholder: "DD/MM/YYYY",
-      },
-      email: {
-        label: "Email",
-        placeholder: "john.doe@example.com",
-      },
+      lastName: "Last Name",
+      email: "Email",
       phone: "Phone (optional)",
     },
     warnings: {
@@ -614,18 +594,8 @@ export const dictionary = {
     },
     contact: {
       firstName: "Voornaam",
-      lastName: {
-        label: "Achternaam",
-        placeholder: "Janssens",
-      },
-      birthDate: {
-        label: "Geboortedatum",
-        placeholder: "DD/MM/JJJJ",
-      },
-      email: {
-        label: "E-mail",
-        placeholder: "jan.janssens@voorbeeld.be",
-      },
+      lastName: "Naam",
+      email: "E-mail",
       phone: "Telefoon (optioneel)",
     },
     warnings: {

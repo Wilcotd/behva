@@ -17,25 +17,12 @@ const createData = (overrides: Partial<FormData> = {}): Partial<FormData> => ({
   userStatus: "individual",
   vehicleType: "car",
   firstRegistrationDate: new Date(),
-  birthDate: new Date(1990, 0, 1), // Default 30+ year old driver
   vehicleRank: "1",
   coverages: { ...defaultCoverages },
   ...overrides,
 });
 
-describe("Pricing Logic", () => {
-  it("should calculate driver age correctly", () => {
-    // 2000-01-01 -> Age should be currentYear - 2000 (roughly)
-    const birthDate = new Date(2000, 0, 1);
-    const data = createData({ birthDate });
-    const result = calculatePremium(data);
-    // We are just verifying logic doesn't crash, 
-    // but ideally we'd export the age calculation or check a side effect if it existed.
-    // Since we don't return metadata, we can't check age directly here without exposing it.
-    // For now, we assume if no error, it's fine.
-    expect(result.annual).toBeGreaterThan(0);
-  });
-
+describe("calculatePremium", () => {
   describe("CAT 1: Cars, Motorcycles, Vans", () => {
     it("should calculate correct base premium for Group 1 (Age < 30)", () => {
       const data = createData({

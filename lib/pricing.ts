@@ -94,18 +94,6 @@ export function calculatePremium(data: Partial<FormData>) {
   // Explicitly calculate vehicle age for clarity and potential use
   const vehicleAgeYears = getVehicleAge(data.firstRegistrationDate);
   const ageGroup = getAgeGroup(data.firstRegistrationDate);
-
-  // Calculate driver age if birthDate is present
-  let driverAge: number | undefined;
-  if (data.birthDate) {
-    const currentYear = new Date().getFullYear();
-    driverAge = currentYear - data.birthDate.getFullYear();
-    // Adjust if birthday hasn't occurred yet this year
-    const m = new Date().getMonth() - data.birthDate.getMonth();
-    if (m < 0 || (m === 0 && new Date().getDate() < data.birthDate.getDate())) {
-      driverAge--;
-    }
-  }
   
   // Determine if it's the first vehicle based on rank
   // rank can be "1", "2", or "3+"
