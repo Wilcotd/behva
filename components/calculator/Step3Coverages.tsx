@@ -10,7 +10,6 @@ import {
   FormDescription,
 } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
-import { pricingConfig } from "@/lib/pricing";
 import { AlertCircle } from "lucide-react";
 import { useTranslation } from "@/components/LanguageProvider";
 
@@ -97,9 +96,6 @@ export function Step3Coverages({ form }: StepProps) {
               <div className="space-y-1 leading-none">
                 <FormLabel>
                   {t.coverages.omnium.label}
-                  <span className="ml-2 text-xs font-normal text-muted-foreground">
-                    (+{pricingConfig.coverages.omnium.value} €)
-                  </span>
                 </FormLabel>
                 <FormDescription>
                   {t.coverages.omnium.description}
@@ -130,9 +126,6 @@ export function Step3Coverages({ form }: StepProps) {
               <div className="space-y-1 leading-none">
                 <FormLabel>
                   {t.coverages.assistance.label}
-                  <span className="ml-2 text-xs font-normal text-muted-foreground">
-                    (+{pricingConfig.coverages.assistance.value} €)
-                  </span>
                 </FormLabel>
                 <FormDescription>
                   {isAssistanceDisabled
@@ -162,9 +155,6 @@ export function Step3Coverages({ form }: StepProps) {
               <div className="space-y-1 leading-none">
                 <FormLabel>
                   {t.coverages.legalProtection.label}
-                  <span className="ml-2 text-xs font-normal text-muted-foreground">
-                    (+{pricingConfig.coverages.legalProtection.value} €)
-                  </span>
                 </FormLabel>
                 <FormDescription>
                   {t.coverages.legalProtection.description}
@@ -192,9 +182,6 @@ export function Step3Coverages({ form }: StepProps) {
               <div className="space-y-1 leading-none">
                 <FormLabel>
                   {t.coverages.driverProtection.label}
-                  <span className="ml-2 text-xs font-normal text-muted-foreground">
-                    (+{pricingConfig.coverages.driverProtection.value} €)
-                  </span>
                 </FormLabel>
                 <FormDescription>
                   {t.coverages.driverProtection.description}
@@ -222,9 +209,6 @@ export function Step3Coverages({ form }: StepProps) {
               <div className="space-y-1 leading-none">
                 <FormLabel>
                   {t.coverages.fireTheftResting.label}
-                  <span className="ml-2 text-xs font-normal text-muted-foreground">
-                    (+{pricingConfig.coverages.fireTheftResting.value} €)
-                  </span>
                 </FormLabel>
                 <FormDescription>
                   {t.coverages.fireTheftResting.description}
@@ -252,9 +236,6 @@ export function Step3Coverages({ form }: StepProps) {
               <div className="space-y-1 leading-none">
                 <FormLabel>
                   {t.coverages.assistancePlus.label}
-                  <span className="ml-2 text-xs font-normal text-muted-foreground">
-                    (+{pricingConfig.coverages.assistancePlus.value} €)
-                  </span>
                 </FormLabel>
                 <FormDescription>
                   {t.coverages.assistancePlus.description}

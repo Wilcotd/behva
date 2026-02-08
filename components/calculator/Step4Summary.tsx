@@ -39,6 +39,7 @@ export function Step4Summary({ form }: StepProps) {
     const isValid = await form.trigger([
       "firstName",
       "lastName",
+      "birthDate",
       "email",
       "phone",
     ]);
@@ -119,7 +120,7 @@ export function Step4Summary({ form }: StepProps) {
               </span>
               <span>{t.summary.year}:</span>
               <span className="font-medium text-foreground">
-                {values.firstRegistrationDate
+                {values.firstRegistrationDate && !isNaN(values.firstRegistrationDate.getTime())
                   ? format(values.firstRegistrationDate, "yyyy")
                   : "-"}
               </span>
@@ -129,7 +130,7 @@ export function Step4Summary({ form }: StepProps) {
               </span>
               <span>{t.summary.status}:</span>
               <span className="font-medium text-foreground">
-                {values.userStatus === "member" ? t.summary.member : t.summary.notMember}
+                {values.userStatus ? t.fields.userStatus.options[values.userStatus] : "-"}
               </span>
             </div>
             <div className="pt-2">
@@ -185,9 +186,9 @@ export function Step4Summary({ form }: StepProps) {
                 name="lastName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t.contact.lastName}</FormLabel>
+                    <FormLabel>{t.contact.lastName.label}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Dupont" {...field} />
+                      <Input placeholder={t.contact.lastName.placeholder} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -198,10 +199,10 @@ export function Step4Summary({ form }: StepProps) {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t.contact.email}</FormLabel>
+                    <FormLabel>{t.contact.email.label}</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="jean.dupont@example.com"
+                        placeholder={t.contact.email.placeholder}
                         type="email"
                         {...field}
                       />

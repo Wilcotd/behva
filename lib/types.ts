@@ -28,7 +28,7 @@ export const plateFormats = [
 
 export const createFormSchema = (t: Dictionary) => z.object({
   // Step 1: User Profile
-  userStatus: z.enum(["member", "not_member"], {
+  userStatus: z.enum(["club_member", "supporter", "individual"], {
     message: t.validation.required,
   }),
   clubName: z.string().optional(),
@@ -37,6 +37,10 @@ export const createFormSchema = (t: Dictionary) => z.object({
   contractType: z.enum(["new", "change"], {
     message: t.validation.required,
   }),
+  // Replaces isFirstVehicle (boolean)
+  vehicleRank: z.enum(["1", "2", "3+"], {
+    message: t.validation.required,
+  }).default("1"),
   vehicleOrContractNumber: z.string().optional(),
 
   // Step 2: Vehicle
@@ -68,6 +72,9 @@ export const createFormSchema = (t: Dictionary) => z.object({
   powerKw: z.coerce.number({
     message: t.validation.numberInvalid,
   }).min(1, t.validation.powerMin),
+  vehicleValue: z.coerce.number({
+    message: t.validation.numberInvalid,
+  }).optional(),
 
   // Step 3: Coverages
   coverages: z.object({
@@ -83,6 +90,9 @@ export const createFormSchema = (t: Dictionary) => z.object({
   // Step 4: Contact
   firstName: z.string().min(1, t.validation.firstNameRequired),
   lastName: z.string().min(1, t.validation.lastNameRequired),
+  birthDate: z.date({
+    message: t.validation.dateRequired,
+  }),
   email: z.string().min(1, t.validation.emailRequired).email(t.validation.emailInvalid),
   phone: z.string().optional(),
 });
@@ -91,8 +101,11 @@ export type FormSchemaType = ReturnType<typeof createFormSchema>;
 export type FormData = z.infer<FormSchemaType>;
 
 export const defaultValues: Partial<FormData> = {
-  userStatus: "not_member",
+  userStatus: "individual",
   contractType: "new",
+  vehicleRank: "1",
+  vehicleType: "car",
+  registrationStatus: "registered",
   coverages: {
     rc: true,
     omnium: false,

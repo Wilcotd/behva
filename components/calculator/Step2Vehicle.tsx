@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { UseFormReturn } from "react-hook-form";
 import {
   FormData,
@@ -24,6 +25,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -31,12 +33,104 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+import { format, parse, isValid } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useTranslation } from "@/components/LanguageProvider";
 
 interface StepProps {
   form: UseFormReturn<FormData>;
+}
+
+interface DatePickerInputProps {
+  value?: Date;
+  onChange: (date?: Date) => void;
+  placeholder?: string;
+}
+
+function DatePickerInput({ value, onChange, placeholder }: DatePickerInputProps) {
+  const [inputValue, setInputValue] = useState("");
+
+  useEffect(() => {
+    if (value) {
+      setInputValue(format(value, "dd/MM/yyyy"));
+    } else {
+      setInputValue("");
+    }
+  }, [value]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let val = e.target.value;
+    
+    // Simple masking: Allow digits and slashes, but we'll reformat
+    const digits = val.replace(/\D/g, "").slice(0, 8);
+    
+    if (val.length < inputValue.length) {
+      // User is deleting, just update state directly but keep valid chars
+      // Or better: allow natural deletion, but maybe enforce format if they type again
+      // We'll just let them delete.
+      setInputValue(val);
+    } else {
+      // User is typing
+      let formatted = digits;
+      if (digits.length >= 3) {
+        formatted = `${digits.slice(0, 2)}/${digits.slice(2)}`;
+      }
+      if (digits.length >= 5) {
+        formatted = `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
+      }
+      setInputValue(formatted);
+      val = formatted;
+    }
+
+    if (val === "") {
+      onChange(undefined);
+      return;
+    }
+
+    if (val.length === 10) {
+      const parsed = parse(val, "dd/MM/yyyy", new Date());
+      if (isValid(parsed)) {
+        if (parsed.getFullYear() > 1900 && parsed <= new Date()) {
+          onChange(parsed);
+        }
+      }
+    }
+  };
+
+  return (
+    <div className="flex gap-2">
+      <Input
+        value={inputValue}
+        onChange={handleInputChange}
+        placeholder={placeholder || "DD/MM/YYYY"}
+        className="flex-1"
+      />
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            variant={"outline"}
+            className={cn(
+              "px-3",
+              !value && "text-muted-foreground"
+            )}
+          >
+            <CalendarIcon className="h-4 w-4" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0" align="start">
+          <Calendar
+            mode="single"
+            selected={value}
+            onSelect={onChange}
+            disabled={(date) =>
+              date > new Date() || date < new Date("1900-01-01")
+            }
+            initialFocus
+          />
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
 }
 
 export function Step2Vehicle({ form }: StepProps) {
@@ -48,6 +142,31 @@ export function Step2Vehicle({ form }: StepProps) {
 
   return (
     <div className="space-y-6">
+      <FormField
+        control={form.control}
+        name="vehicleRank"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>
+              {t.fields.vehicleRank.label}
+            </FormLabel>
+            <Select onValueChange={field.onChange} value={field.value}>
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder={t.fields.vehicleRank.placeholder} />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                <SelectItem value="1">{t.options.vehicleRanks["1"]}</SelectItem>
+                <SelectItem value="2">{t.options.vehicleRanks["2"]}</SelectItem>
+                <SelectItem value="3+">{t.options.vehicleRanks["3+"]}</SelectItem>
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <FormField
           control={form.control}
@@ -84,7 +203,7 @@ export function Step2Vehicle({ form }: StepProps) {
               <FormLabel>
                 {t.fields.registrationStatus.label}
               </FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue
@@ -140,7 +259,7 @@ export function Step2Vehicle({ form }: StepProps) {
                 <FormLabel>{t.fields.plateType.label}</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  value={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -168,7 +287,7 @@ export function Step2Vehicle({ form }: StepProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>{t.fields.plateFormat.label}</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue
@@ -256,37 +375,13 @@ export function Step2Vehicle({ form }: StepProps) {
               <FormLabel>
                 {t.fields.firstRegistrationDate.label}
               </FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "w-full pl-3 text-left font-normal bg-input hover:bg-input border-input",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      {field.value ? (
-                        format(field.value, "PPP")
-                      ) : (
-                        <span>JJ/MM/AAAA</span>
-                      )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    disabled={(date) =>
-                      date > new Date() || date < new Date("1900-01-01")
-                    }
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
+              <FormControl>
+                <DatePickerInput
+                  value={field.value}
+                  onChange={field.onChange}
+                  placeholder={t.fields.firstRegistrationDate.placeholder}
+                />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
@@ -302,6 +397,24 @@ export function Step2Vehicle({ form }: StepProps) {
                 <Input
                   type="number"
                   placeholder={t.fields.powerKw.placeholder}
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="vehicleValue"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t.fields.vehicleValue.label}</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  placeholder={t.fields.vehicleValue.placeholder}
                   {...field}
                 />
               </FormControl>

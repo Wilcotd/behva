@@ -42,7 +42,7 @@ export function Calculator({ searchParams }: CalculatorProps) {
     if (searchParams) {
       const clubMember = searchParams.get("Lid van een club");
       if (clubMember) {
-        form.setValue("userStatus", clubMember.startsWith("Ja") ? "member" : "not_member");
+        form.setValue("userStatus", clubMember.startsWith("Ja") ? "club_member" : "individual");
       }
 
       const vehicleType = searchParams.get("Type voertuign");
@@ -89,6 +89,7 @@ export function Calculator({ searchParams }: CalculatorProps) {
       ]);
     } else if (currentStep === 1) {
       isValid = await form.trigger([
+        "isFirstVehicle",
         "vehicleType",
         "registrationStatus",
         "registrationNumber",
@@ -99,6 +100,7 @@ export function Calculator({ searchParams }: CalculatorProps) {
         "chassisNumber",
         "firstRegistrationDate",
         "powerKw",
+        "vehicleValue",
       ]);
     } else if (currentStep === 2) {
       isValid = await form.trigger(["coverages"]);

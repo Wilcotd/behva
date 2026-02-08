@@ -20,8 +20,9 @@ export const dictionary = {
       userStatus: {
         label: "Je suis",
         options: {
-          not_member: "Pas membre",
-          member: "Membre d’un club ou fédération",
+          club_member: "Membre d’un club",
+          supporter: "Supporter",
+          individual: "Individuel",
         },
       },
       clubName: {
@@ -81,16 +82,33 @@ export const dictionary = {
       },
       firstRegistrationDate: {
         label: "Date de 1ère mise en circulation",
+        placeholder: "JJ/MM/AAAA",
       },
       powerKw: {
         label: "Puissance (kW)",
         placeholder: "Ex: 150",
       },
+      vehicleValue: {
+        label: "Valeur du véhicule (€)",
+        placeholder: "Ex: 25000",
+      },
+      isFirstVehicle: {
+        label: "Est-ce le 1er véhicule assuré ?",
+      },
+      vehicleRank: {
+        label: "Rang du véhicule",
+        placeholder: "Sélectionner le rang",
+      },
     },
     coverages: {
       rc: {
-        label: "Responsabilité Civile Simple",
-        description: "Assurance obligatoire pour circuler.",
+        label: "Responsabilité Civile",
+        description: "Assurance obligatoire pour rouler.",
+      },
+      surcharge: {
+        individual: {
+          label: "Cotisation Membre (Individuel)",
+        },
       },
       omnium: {
         label: "Omnium complète",
@@ -119,6 +137,7 @@ export const dictionary = {
     },
     summary: {
       title: "Votre estimation",
+      calculating: "Complétez le formulaire pour voir votre estimation.",
       annualPremium: "Prime annuelle estimée",
       monthlyPremium: "Soit par mois",
       breakdown: "Détail des garanties",
@@ -141,8 +160,18 @@ export const dictionary = {
     },
     contact: {
       firstName: "Prénom",
-      lastName: "Nom",
-      email: "Email",
+      lastName: {
+        label: "Nom",
+        placeholder: "Dupont",
+      },
+      birthDate: {
+        label: "Date de naissance",
+        placeholder: "JJ/MM/AAAA",
+      },
+      email: {
+        label: "Email",
+        placeholder: "jean.dupont@exemple.com",
+      },
       phone: "Téléphone (optionnel)",
     },
     warnings: {
@@ -184,6 +213,11 @@ export const dictionary = {
         normal: "Plaque normale",
         classic: "Plaque ancêtre (O)",
       },
+      vehicleRanks: {
+        "1": "1er Véhicule",
+        "2": "2ème Véhicule",
+        "3+": "3ème Véhicule ou plus",
+      },
       plateFormats: {
         rectangular: "Rectangulaire (52×11)",
         square: "Carré (34×21)",
@@ -213,8 +247,9 @@ export const dictionary = {
       userStatus: {
         label: "I am",
         options: {
-          not_member: "Not a member",
-          member: "Member of a club or federation",
+          club_member: "Club Member",
+          supporter: "Supporter",
+          individual: "Individual",
         },
       },
       clubName: {
@@ -274,16 +309,33 @@ export const dictionary = {
       },
       firstRegistrationDate: {
         label: "First Registration Date",
+        placeholder: "DD/MM/YYYY",
       },
       powerKw: {
         label: "Power (kW)",
         placeholder: "Ex: 150",
+      },
+      vehicleValue: {
+        label: "Vehicle Value (€)",
+        placeholder: "Ex: 25000",
+      },
+      isFirstVehicle: {
+        label: "Is this the 1st insured vehicle?",
+      },
+      vehicleRank: {
+        label: "Vehicle Rank",
+        placeholder: "Select rank",
       },
     },
     coverages: {
       rc: {
         label: "Civil Liability",
         description: "Mandatory insurance for driving.",
+      },
+      surcharge: {
+        individual: {
+          label: "Membership Fee (Individual)",
+        },
       },
       omnium: {
         label: "Full Omnium",
@@ -312,6 +364,7 @@ export const dictionary = {
     },
     summary: {
       title: "Your Estimate",
+      calculating: "Complete the form to see your estimate.",
       annualPremium: "Estimated Annual Premium",
       monthlyPremium: "Or per month",
       breakdown: "Coverage Details",
@@ -334,8 +387,18 @@ export const dictionary = {
     },
     contact: {
       firstName: "First Name",
-      lastName: "Last Name",
-      email: "Email",
+      lastName: {
+        label: "Last Name",
+        placeholder: "Doe",
+      },
+      birthDate: {
+        label: "Date of Birth",
+        placeholder: "DD/MM/YYYY",
+      },
+      email: {
+        label: "Email",
+        placeholder: "john.doe@example.com",
+      },
       phone: "Phone (optional)",
     },
     warnings: {
@@ -377,6 +440,11 @@ export const dictionary = {
         normal: "Normal Plate",
         classic: "Classic Plate (O)",
       },
+      vehicleRanks: {
+        "1": "1st Vehicle",
+        "2": "2nd Vehicle",
+        "3+": "3rd Vehicle or more",
+      },
       plateFormats: {
         rectangular: "Rectangular (52×11)",
         square: "Square (34×21)",
@@ -406,8 +474,9 @@ export const dictionary = {
       userStatus: {
         label: "Ik ben",
         options: {
-          not_member: "Geen lid",
-          member: "Lid van een club of federatie",
+          club_member: "Clublid",
+          supporter: "Supporter",
+          individual: "Individu",
         },
       },
       clubName: {
@@ -467,16 +536,33 @@ export const dictionary = {
       },
       firstRegistrationDate: {
         label: "Datum 1e ingebruikname",
+        placeholder: "DD/MM/JJJJ",
       },
       powerKw: {
         label: "Vermogen (kW)",
         placeholder: "Bijv: 150",
+      },
+      vehicleValue: {
+        label: "Waarde voertuig (€)",
+        placeholder: "Bijv: 25000",
+      },
+      isFirstVehicle: {
+        label: "Is dit het 1ste verzekerde voertuig?",
+      },
+      vehicleRank: {
+        label: "Rang van het voertuig",
+        placeholder: "Selecteer rang",
       },
     },
     coverages: {
       rc: {
         label: "Burgerlijke Aansprakelijkheid",
         description: "Verplichte verzekering om te rijden.",
+      },
+      surcharge: {
+        individual: {
+          label: "Lidmaatschapsbijdrage (Individueel)",
+        },
       },
       omnium: {
         label: "Volledige Omnium",
@@ -505,6 +591,7 @@ export const dictionary = {
     },
     summary: {
       title: "Uw Schatting",
+      calculating: "Vul het formulier in om uw schatting te zien.",
       annualPremium: "Geschatte Jaarpremie",
       monthlyPremium: "Of per maand",
       breakdown: "Detail van de waarborgen",
@@ -527,8 +614,18 @@ export const dictionary = {
     },
     contact: {
       firstName: "Voornaam",
-      lastName: "Naam",
-      email: "E-mail",
+      lastName: {
+        label: "Achternaam",
+        placeholder: "Janssens",
+      },
+      birthDate: {
+        label: "Geboortedatum",
+        placeholder: "DD/MM/JJJJ",
+      },
+      email: {
+        label: "E-mail",
+        placeholder: "jan.janssens@voorbeeld.be",
+      },
       phone: "Telefoon (optioneel)",
     },
     warnings: {
@@ -567,8 +664,13 @@ export const dictionary = {
         storage: "Zonder inschrijving (stalling)",
       },
       plateTypes: {
-        normal: "Normale plaat",
-        classic: "Oldtimerplaat (O)",
+        normal: "Normale Plaat",
+        classic: "Oldtimer Plaat (O)",
+      },
+      vehicleRanks: {
+        "1": "1ste Voertuig",
+        "2": "2de Voertuig",
+        "3+": "3de Voertuig of meer",
       },
       plateFormats: {
         rectangular: "Rechthoekig (52×11)",
