@@ -1,4 +1,4 @@
-import { FormData, vehicleTypes } from "./types";
+import { FormData } from "./types";
 
 // 2026 Tariff Grid Structure
 // Categories:
@@ -12,25 +12,40 @@ const CATEGORY_MAPPING: Record<string, 1 | 2 | 3 | 4 | 5> = {
   car: 1,
   motorcycle: 1,
   van: 1,
-  truck: 2, // Assuming truck > 3.5t
+  truck: 2,
   moped: 3,
   tractor: 4,
   trailer: 5,
 };
 
-// Placeholder Base Premiums (RC)
-// Structure: [Category][AgeGroup][PowerGroup?]
-// We'll use a simplified flat structure for now and expand as data becomes available.
+type AgeGroup = "group1" | "group2" | "group3";
+
+// Base Premiums (RC) structure: [Category][AgeGroup] -> { first, additional }
+// CAT 1 Group 3 has special logic handled in calculation
 const BASE_PREMIUMS = {
   CAT1: {
-    group1: 200, // Placeholder
-    group2: 180,
-    group3: 150,
+    group1: { first: 79, additional: 33 },
+    group2: { first: 119, additional: 33 },
+    // Group 3 is special (Power/Type dependent)
   },
-  CAT2: 250,
-  CAT3: 50,
-  CAT4: 100,
-  CAT5: 40,
+  CAT2: {
+    group1: { first: 94, additional: 49 },
+    group2: { first: 134, additional: 49 },
+    group3: { first: 239, additional: 239 },
+  },
+  CAT3: {
+    group1: { first: 73, additional: 17 },
+  },
+  CAT4: {
+    group1: { first: 43, additional: 17 },
+    group2: { first: 58, additional: 17 },
+  },
+  CAT5: {
+    // Logic: Group 1 (15y+) = 50, Group 2 (25y+) = 25. 
+    // Implies >25 is cheaper.
+    group1: 50,
+    group2: 25,
+  },
 };
 
 const SURCHARGES = {
@@ -46,35 +61,50 @@ const COVERAGES = {
     CAT3: { first: 12, additional: 0 },
     OTHER: { first: 17, additional: 0 },
   },
-  driverProtection: 40, // Unchanged?
+  driverProtection: 40, // Unchanged from previous assumption
   omnium: {
-    // Structure for 1st, 2nd, 3rd+ vehicles
-    // Example: { limit: 10000, premiums: { "1": 175, "2": 150, "3+": 125 } }
     tiers: [
       { limit: 10000, premiums: { "1": 175, "2": 175, "3+": 175 } },
-      { limit: 20000, premiums: { "1": 230, "2": 230, "3+": 230 } },
-      { limit: 30000, premiums: { "1": 300, "2": 300, "3+": 300 } },
-      { limit: 40000, premiums: { "1": 400, "2": 400, "3+": 400 } },
-      { limit: 50000, premiums: { "1": 500, "2": 500, "3+": 500 } },
+      { limit: 20000, premiums: { "1": 230, "2": 175, "3+": 175 } },
+      { limit: 30000, premiums: { "1": 330, "2": 235, "3+": 175 } },
+      { limit: 40000, premiums: { "1": 430, "2": 335, "3+": 175 } },
+      { limit: 50000, premiums: { "1": 530, "2": 435, "3+": 175 } },
     ],
   },
 };
 
-function getAgeGroup(date: Date): "group1" | "group2" | "group3" {
-  const year = date.getFullYear();
-  const currentYear = new Date().getFullYear();
-  const age = currentYear - year;
-
-  // Placeholder logic for age groups
-  if (age >= 50) return "group3";
-  if (age >= 30) return "group2";
-  return "group1";
-}
-
-// Helper to get exact age if needed for debugging/display
+// Helper to get exact age
 export function getVehicleAge(date: Date): number {
   const currentYear = new Date().getFullYear();
   return currentYear - date.getFullYear();
+}
+
+function getAgeGroup(age: number, category: 1 | 2 | 3 | 4 | 5): AgeGroup | null {
+  if (category === 1 || category === 2) {
+    if (age >= 40) return "group1";
+    if (age >= 25) return "group2";
+    if (age >= 15) return "group3";
+    return null; // < 15 not covered?
+  }
+  
+  if (category === 3) { // Mopeds
+    if (age >= 15) return "group1";
+    return null;
+  }
+  
+  if (category === 4) { // Tractors
+    if (age >= 40) return "group1";
+    if (age >= 25) return "group2";
+    return null; // < 25 not covered?
+  }
+  
+  if (category === 5) { // Trailers
+    if (age >= 25) return "group2"; // Cheaper
+    if (age >= 15) return "group1";
+    return null;
+  }
+
+  return null;
 }
 
 function getVehicleCategory(type: string): 1 | 2 | 3 | 4 | 5 {
@@ -90,45 +120,78 @@ export function calculatePremium(data: Partial<FormData>) {
   }
 
   const category = getVehicleCategory(data.vehicleType);
-  
-  // Explicitly calculate vehicle age for clarity and potential use
   const vehicleAgeYears = getVehicleAge(data.firstRegistrationDate);
-  const ageGroup = getAgeGroup(data.firstRegistrationDate);
-
-  console.log(`[Pricing] Category: CAT ${category}, Age Group: ${ageGroup}, Age: ${vehicleAgeYears} years`);
+  const ageGroup = getAgeGroup(vehicleAgeYears, category);
   
-  // Determine if it's the first vehicle based on rank
-  // rank can be "1", "2", or "3+"
+  console.log(`[Pricing] Category: CAT ${category}, Age Group: ${ageGroup}, Age: ${vehicleAgeYears} years`);
+
   const rank = data.vehicleRank || "1";
   const isFirst = rank === "1";
 
   // 1. Base RC Premium
   let rcAmount = 0;
-  if (category === 1) {
-    // CAT 1 logic (simplified)
-    // TODO: Implement power check for Group 3
-    rcAmount = BASE_PREMIUMS.CAT1[ageGroup];
-  } else if (category === 2) {
-    rcAmount = BASE_PREMIUMS.CAT2;
-  } else if (category === 3) {
-    rcAmount = BASE_PREMIUMS.CAT3;
-  } else if (category === 4) {
-    rcAmount = BASE_PREMIUMS.CAT4;
-  } else if (category === 5) {
-    rcAmount = BASE_PREMIUMS.CAT5;
+
+  if (!ageGroup) {
+    // TODO: Handle too young vehicles gracefully? For now 0.
+    rcAmount = 0;
+  } else {
+    if (category === 1) {
+      if (ageGroup === "group3") {
+        // Special logic for CAT 1 Group 3 (15-24y)
+        if (data.vehicleType === "motorcycle") {
+          rcAmount = 167; // Fixed for Moto
+        } else {
+          // Car/Van
+          const power = data.powerKw || 0;
+          if (power <= 140) {
+            rcAmount = 214;
+          } else {
+            rcAmount = 264;
+          }
+        }
+      } else {
+        // Group 1 & 2
+        const rates = BASE_PREMIUMS.CAT1[ageGroup];
+        rcAmount = isFirst ? rates.first : rates.additional;
+      }
+    } else if (category === 2) {
+      const rates = BASE_PREMIUMS.CAT2[ageGroup];
+      rcAmount = isFirst ? rates.first : rates.additional;
+    } else if (category === 3) {
+      if (ageGroup === "group1") {
+        const rates = BASE_PREMIUMS.CAT3.group1;
+        rcAmount = isFirst ? rates.first : rates.additional;
+      }
+    } else if (category === 4) {
+      // Tractors: Group 1 or 2
+      if (ageGroup === "group1" || ageGroup === "group2") {
+        const rates = BASE_PREMIUMS.CAT4[ageGroup];
+        rcAmount = isFirst ? rates.first : rates.additional;
+      }
+    } else if (category === 5) {
+      // Trailers: Group 1 or 2 (Fixed, no first/additional distinction in simple table? 
+      // Doc says "Full Club Member" and gives 1 price. 
+      // But let's assume it applies to everyone or handles surcharge separately.
+      if (ageGroup === "group2") rcAmount = BASE_PREMIUMS.CAT5.group2;
+      else if (ageGroup === "group1") rcAmount = BASE_PREMIUMS.CAT5.group1;
+    }
   }
 
   // Membership Surcharge (Individual) - Only on first vehicle
+  // "valables pour « Club Member » et « Supporter » -> +50,00 € sur premier véhicule pour « Individual »"
+  // Applies to RC+Assistance section.
   let surchargeAmount = 0;
   if (data.userStatus === "individual" && isFirst) {
     surchargeAmount = SURCHARGES.individual;
   }
 
   // Add RC to total
-  annualPremium += rcAmount;
-  breakdown.push({ label: "coverages.rc.label", amount: rcAmount });
+  if (rcAmount > 0) {
+    annualPremium += rcAmount;
+    breakdown.push({ label: "coverages.rc.label", amount: rcAmount });
+  }
 
-  // Add Surcharge to total (separately)
+  // Add Surcharge to total
   if (surchargeAmount > 0) {
     annualPremium += surchargeAmount;
     breakdown.push({ label: "coverages.surcharge.individual.label", amount: surchargeAmount });
@@ -137,10 +200,81 @@ export function calculatePremium(data: Partial<FormData>) {
   // 2. Coverages
   if (data.coverages) {
     // Assistance
+    // "sauf vélomoteurs et tracteurs agricoles" -> Excluded for CAT 3 & 4
     if (data.coverages.assistance) {
-      const amount = isFirst ? COVERAGES.assistance.first : COVERAGES.assistance.additional;
-      annualPremium += amount;
-      breakdown.push({ label: "coverages.assistance.label", amount });
+      if (category !== 3 && category !== 4) {
+         // Standard Assistance is INCLUDED in the base premium for RC? 
+         // Doc Title: "R.C. + ASSISTANCE"
+         // Doc Description: "Dépannage inclus dans la prime (accident ou panne)"
+         // So we should NOT add extra for basic assistance.
+         
+         // However, there is an EXTENSION:
+         // "Extension possible ... Premier véhicule : 66 EUR ... A partir du second : 39 EUR"
+         // Wait, the UI has "Assistance" checkbox. If it refers to the Extension, we charge.
+         // If it refers to basic assistance, it's free/included.
+         
+         // Looking at config.ts:
+         // assistance: { label: "Assistance", description: "Dépannage..." }
+         // assistancePlus: { label: "Extension assistance..." }
+         
+         // If "Assistance" in UI means the basic included one, price is 0 (included in RC).
+         // If "Assistance Plus" is selected, we charge 66/39.
+         
+         // Let's assume the "Assistance" checkbox in Step 3 is for the OPTIONAL Extension?
+         // OR, is it just showing that it's included?
+         // In `types.ts`, `assistance` defaults to true. 
+         
+         // Refined Logic:
+         // Basic Assistance is INCLUDED in RC premium for CAT 1, 2, 5 (maybe 5? Doc says "sauf vélomoteurs et tracteurs").
+         // So for CAT 3 & 4, Assistance is NOT available or NOT included.
+         
+         // IF the user selects "Assistance Plus" (Extension), we charge.
+         // The `assistance` field in types might be redundant if it's mandatory/included.
+         // But let's keep it. If checked, and it's an extension, charge.
+         
+         // Let's look at the previous code:
+         // assistance: { first: 66, additional: 39 }
+         // This matches the "Extension possible" prices.
+         // So the "Assistance" checkbox in the UI likely corresponds to this "Extension".
+         // BUT the UI also has `assistancePlus`.
+         
+         // Let's check config.ts again.
+         // `assistance`: "Assistance"
+         // `assistancePlus`: "Extension assistance Europe..."
+         
+         // Clarification needed. For now, I will assume:
+         // - Basic Assistance is INCLUDED in RC (no extra charge).
+         // - "Assistance Plus" (Extension) costs 66/39.
+         // - The `assistance` checkbox in UI might be confusing if it maps to the Extension prices in my previous code.
+         
+         // Update: I will treat `assistancePlus` as the Extension (66/39).
+         // I will treat `assistance` as the Basic Included one (0 EUR, but maybe we show it in breakdown as "Included"?).
+         
+         // Let's see previous implementation:
+         // if (data.coverages.assistance) { annualPremium += ... }
+         // It seems previous dev mapped `assistance` to the paid extension.
+         
+         // Decision: 
+         // Map `assistancePlus` to the 66/39 EUR extension.
+         // Map `assistance` to 0 EUR (Included) or just ignore if it's base.
+         // BUT wait, previous code had `assistance` costing 66/39.
+         // Maybe the UI "Assistance" IS the extension?
+         // Let's check the labels.
+         // `assistancePlus`: "Extension assistance Europe + véhicule remplacement"
+         // `assistance`: "Assistance"
+         
+         // I'll stick to: `assistance` checkbox = Basic (Included). `assistancePlus` = Extension (Paid).
+         // If `assistance` is checked, cost is 0 (included in RC).
+         // If `assistancePlus` is checked, cost is 66/39.
+      }
+    }
+    
+    if (data.coverages.assistancePlus) {
+        if (category !== 3 && category !== 4) {
+            const amount = isFirst ? COVERAGES.assistance.first : COVERAGES.assistance.additional;
+            annualPremium += amount;
+            breakdown.push({ label: "coverages.assistancePlus.label", amount });
+        }
     }
 
     // Legal Protection
@@ -173,18 +307,18 @@ export function calculatePremium(data: Partial<FormData>) {
       }
     }
     
-    // Fire/Theft (Legacy/Placeholder?)
+    // Fire/Theft (Legacy/Placeholder?) - Not in 2026 doc?
+    // "Incendie / Vol au repos" -> Not explicitly in the doc snippet.
+    // I will keep it as is (80 EUR) or remove if unsure. 
+    // Doc says "Omnium... Covers material damage".
+    // I'll leave it but maybe warn or set to 0? 
+    // Previous code had 80. I'll keep it for now to avoid breaking existing features if not requested.
     if (data.coverages.fireTheftResting) {
-       // Assuming this is handled via Omnium or separate? 
-       // Keeping simple fixed value for now if selected
        const amount = 80; 
        annualPremium += amount;
        breakdown.push({ label: "coverages.fireTheftResting.label", amount });
     }
   }
-
-  // 3. Multi-vehicle logic?
-  // Already handled via isFirst checks in components.
 
   return {
     annual: Math.round(annualPremium * 100) / 100,

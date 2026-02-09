@@ -137,6 +137,37 @@ export function Step3Coverages({ form }: StepProps) {
           )}
         />
 
+        {/* Assistance Plus */}
+        <FormField
+          control={form.control}
+          name="coverages.assistancePlus"
+          render={({ field }) => (
+            <FormItem
+              className={`flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 hover:bg-muted/50 transition-colors cursor-pointer ${
+                isAssistanceDisabled ? "opacity-50 pointer-events-none" : ""
+              }`}
+            >
+              <FormControl>
+                <Checkbox
+                  checked={!!field.value}
+                  onCheckedChange={field.onChange}
+                  disabled={isAssistanceDisabled}
+                />
+              </FormControl>
+              <div className="space-y-1 leading-none">
+                <FormLabel>
+                  {t.coverages.assistancePlus.label}
+                </FormLabel>
+                <FormDescription>
+                  {isAssistanceDisabled
+                    ? "Non disponible pour ce type de véhicule"
+                    : t.coverages.assistancePlus.description}
+                </FormDescription>
+              </div>
+            </FormItem>
+          )}
+        />
+
         {/* Legal Protection */}
         <FormField
           control={form.control}

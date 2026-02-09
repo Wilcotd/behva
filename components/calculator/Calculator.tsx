@@ -89,7 +89,7 @@ export function Calculator({ searchParams }: CalculatorProps) {
       ]);
     } else if (currentStep === 1) {
       isValid = await form.trigger([
-        "isFirstVehicle",
+        "vehicleRank",
         "vehicleType",
         "registrationStatus",
         "registrationNumber",
