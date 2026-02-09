@@ -94,6 +94,8 @@ export function calculatePremium(data: Partial<FormData>) {
   // Explicitly calculate vehicle age for clarity and potential use
   const vehicleAgeYears = getVehicleAge(data.firstRegistrationDate);
   const ageGroup = getAgeGroup(data.firstRegistrationDate);
+
+  console.log(`[Pricing] Category: CAT ${category}, Age Group: ${ageGroup}, Age: ${vehicleAgeYears} years`);
   
   // Determine if it's the first vehicle based on rank
   // rank can be "1", "2", or "3+"
