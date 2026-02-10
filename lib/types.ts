@@ -117,6 +117,10 @@ export interface PremiumBreakdown {
       power?: number;
     };
     omnium?: any;
+    legalProtection?: {
+      rule?: string;
+      base?: number;
+    };
   };
 }
 

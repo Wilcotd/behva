@@ -1,10 +1,11 @@
 export const dictionary = {
   fr: {
     common: {
-      step: "Etape",
-      of: "sur",
+      step: "Étape",
+      of: "de",
       previous: "Précédent",
       next: "Suivant",
+      edit: "Modifier",
     },
     header: {
       title: "Calculateur de Prime Assurance Ancêtre",
@@ -111,36 +112,46 @@ export const dictionary = {
         },
       },
       omnium: {
-        label: "Omnium complète",
-        description: "Couvre les dégâts matériels à votre propre véhicule.",
+      label: "Omnium",
+        description: "Couvre les dommages à votre propre véhicule. La franchise pour dégâts matériels et vandalisme est de 2,5% de la valeur assurée (min. 250€, max. 1.250€).",
+      full: {
+        label: "Omnium Complète",
+        description: "Couvre les dommages propres, le vandalisme, le vol, l'incendie, le bris de glace, les forces de la nature et les collisions avec des animaux."
       },
-      omniumType: {
-        full: "Omnium Complète",
-        mini: "Mini-Omnium",
-      },
+      mini: {
+        label: "Mini Omnium",
+        description: "Couvre le vol, l'incendie, le bris de glace, les forces de la nature et les collisions avec des animaux."
+      }
+    },
+    omniumType: {
+      full: "Omnium Complète",
+      mini: "Mini Omnium",
+    },
       assistance: {
         label: "Assistance",
-        description: "Dépannage en cas de panne ou d'accident.",
+        description: "Dépannage inclus en cas d'accident ou de panne (sauf vélomoteurs et tracteurs agricoles). Franchise de 5km du domicile (sauf accident). Valable en Belgique et pays limitrophes.",
       },
       legalProtection: {
         label: "Protection Juridique",
         description: "Aide juridique en cas de litige.",
+        details:
+          "Libre choix d’un avocat - Recours civil/pénale/contractuel - 12.500 EUR par sinistre",
       },
       driverProtection: {
         label: "Protection des conducteurs",
-        description: "Couvre les dommages corporels du conducteur.",
+        description: "Garanties: Décès 12.500€, Invalidité Permanente 25.000€, Frais Médicaux 2.500€. Prime: Voiture 9€, Moto/Cyclo 12€.",
       },
       fireTheftResting: {
         label: "Incendie / Vol au repos",
         description: "Couvre le véhicule au garage (non immatriculé).",
       },
       assistancePlus: {
-        label: "Extension assistance Europe + véhicule remplacement",
-        description: "Assistance étendue avec véhicule de remplacement.",
+        label: "Extension Assistance Europe",
+        description: "Étend la couverture à toute l'Europe avec véhicule de remplacement et assistance à la famille.",
       },
     },
     summary: {
-      title: "Votre estimation",
+      title: "Vérifiez votre demande",
       calculating: "Complétez le formulaire pour voir votre estimation.",
       annualPremium: "Prime annuelle estimée",
       monthlyPremium: "Soit par mois",
@@ -175,7 +186,21 @@ export const dictionary = {
         condition: "Condition",
         vehicleValue: "Valeur du véhicule",
         omniumType: "Type d'omnium",
+        mopeds: "Cyclomoteurs",
+        allOtherCategories: "Toutes les autres catégories",
+        vehicleAtRest: "Véhicule au repos (0.58%)",
+        miniOmnium25: "Mini-Omnium, 25+ ans (0.83%)",
+        miniOmnium15_24: "Mini-Omnium, 15-24 ans (1.18%)",
+        omniumPercentage25: "Omnium, 25+ ans (% de la valeur)",
+        omniumPercentage15_24: "Omnium, 15-24 ans (% de la valeur)",
+        omniumTable: "Tableau Omnium standard",
+        minPremiumApplied: "Prime minimale appliquée",
+        percentage: "Pourcentage",
       },
+      notes: {
+        title: "Remarques",
+        contactBrokerOmnium: "Pour les véhicules de plus de 150.000 €, veuillez contacter le courtier.",
+      }
     },
     contact: {
       firstName: "Prénom",
@@ -239,11 +264,12 @@ export const dictionary = {
   },
   en: {
     common: {
-      step: "Step",
-      of: "of",
-      previous: "Previous",
-      next: "Next",
-    },
+    step: "Step",
+    of: "of",
+    previous: "Previous",
+    next: "Next",
+    edit: "Edit",
+  },
     header: {
       title: "Classic Car Insurance Premium Calculator",
       subtitle: "Estimate your insurance premium in a few simple steps.",
@@ -349,36 +375,46 @@ export const dictionary = {
         },
       },
       omnium: {
-        label: "Full Omnium",
-        description: "Covers material damage to your own vehicle.",
+        label: "Omnium",
+        description: "Covers damage to your own vehicle. The deductible for material damage and vandalism is 2.5% of the insured value (min. €250, max. €1,250).",
+        full: {
+          label: "Full Omnium",
+          description: "Covers own damage, vandalism, theft, fire, glass breakage, natural forces, and collisions with animals."
+        },
+        mini: {
+          label: "Mini Omnium",
+          description: "Covers theft, fire, glass breakage, natural forces, and collisions with animals."
+        }
       },
       omniumType: {
         full: "Full Omnium",
-        mini: "Mini-Omnium",
+        mini: "Mini Omnium",
       },
       assistance: {
         label: "Assistance",
-        description: "Breakdown assistance in case of breakdown or accident.",
+        description: "Breakdown assistance included in case of accident or breakdown (except for mopeds and agricultural tractors). 5km deductible from home (except in case of accident). Valid in Belgium and neighboring countries.",
       },
       legalProtection: {
         label: "Legal Protection",
         description: "Legal help in case of dispute.",
+        details:
+          "Free choice of a lawyer - Civil/penal/contractual recourse - 12,500 EUR per claim",
       },
       driverProtection: {
         label: "Driver Protection",
-        description: "Covers bodily injury to the driver.",
+        description: "Coverage: Death €12,500, Permanent Disability €25,000, Medical Expenses €2,500. Premium: Car €9, Moto/Moped €12.",
       },
       fireTheftResting: {
         label: "Fire / Theft Resting",
         description: "Covers the vehicle in the garage (not registered).",
       },
       assistancePlus: {
-        label: "Assistance Extension Europe + Replacement Vehicle",
-        description: "Extended assistance with replacement vehicle.",
+        label: "Europe Assistance Extension",
+        description: "Extends coverage to all of Europe with a replacement vehicle and family assistance.",
       },
     },
     summary: {
-      title: "Your Estimate",
+      title: "Review your submission",
       calculating: "Complete the form to see your estimate.",
       annualPremium: "Estimated Annual Premium",
       monthlyPremium: "Or per month",
@@ -413,7 +449,21 @@ export const dictionary = {
         condition: "Condition",
         vehicleValue: "Vehicle Value",
         omniumType: "Omnium Type",
+        mopeds: "Mopeds",
+        allOtherCategories: "All other categories",
+        vehicleAtRest: "Vehicle at rest (0.58%)",
+        miniOmnium25: "Mini-Omnium, 25+ years (0.83%)",
+        miniOmnium15_24: "Mini-Omnium, 15-24 years (1.18%)",
+        omniumPercentage25: "Omnium, 25+ years (% of value)",
+        omniumPercentage15_24: "Omnium, 15-24 years (% of value)",
+        omniumTable: "Standard Omnium Table",
+        minPremiumApplied: "Minimum premium applied",
+        percentage: "Percentage",
       },
+      notes: {
+        title: "Notes",
+        contactBrokerOmnium: "For vehicles over €150,000, please contact the broker.",
+      }
     },
     contact: {
       firstName: "First Name",
@@ -481,6 +531,7 @@ export const dictionary = {
       of: "van",
       previous: "Vorige",
       next: "Volgende",
+      edit: "Bewerken",
     },
     header: {
       title: "Premiecalculator Oldtimerverzekering",
@@ -587,36 +638,46 @@ export const dictionary = {
         },
       },
       omnium: {
-        label: "Volledige Omnium",
-        description: "Dekt materiële schade aan uw eigen voertuig.",
+        label: "Omnium",
+        description: "Dekt schade aan uw eigen voertuig. De franchise voor materiële schade en vandalisme bedraagt 2,5% van de verzekerde waarde (min. €250, max. €1.250).",
+        full: {
+          label: "Volledige Omnium",
+          description: "Dekt eigen schade, vandalisme, diefstal, brand, glasbreuk, natuurkrachten en aanrijdingen met dieren."
+        },
+        mini: {
+          label: "Mini Omnium",
+          description: "Dekt diefstal, brand, glasbreuk, natuurkrachten en aanrijdingen met dieren."
+        }
       },
       omniumType: {
         full: "Volledige Omnium",
-        mini: "Mini-Omnium",
+        mini: "Mini Omnium",
       },
       assistance: {
         label: "Bijstand",
-        description: "Pechverhelping bij pech of ongeval.",
+        description: "Pechverhelping inbegrepen bij ongeval of pech (behalve voor bromfietsen en landbouwtractoren). Franchise van 5 km vanaf de woonplaats (behalve bij ongeval). Geldig in België en buurlanden.",
       },
       legalProtection: {
         label: "Rechtsbijstand",
         description: "Juridische hulp bij geschillen.",
+        details:
+          "Vrije keuze van advocaat - Burgerlijk/strafrechtelijk/contractueel verhaal - 12.500 EUR per schadegeval",
       },
       driverProtection: {
         label: "Bestuurdersbescherming",
-        description: "Dekt lichamelijk letsel van de bestuurder.",
+        description: "Dekking: Overlijden €12.500, Blijvende Invaliditeit €25.000, Medische Kosten €2.500. Premie: Auto €9, Moto/Bromfiets €12.",
       },
       fireTheftResting: {
         label: "Brand / Diefstal (Stilstand)",
         description: "Dekt het voertuig in de garage (niet ingeschreven).",
       },
       assistancePlus: {
-        label: "Uitbreiding Bijstand Europa + Vervangwagen",
-        description: "Uitgebreide bijstand met vervangwagen.",
+        label: "Uitbreiding Bijstand Europa",
+        description: "Breidt de dekking uit naar heel Europa met een vervangwagen en bijstand aan het gezin.",
       },
     },
     summary: {
-      title: "Uw Schatting",
+      title: "Controleer uw inzending",
       calculating: "Vul het formulier in om uw schatting te zien.",
       annualPremium: "Geschatte Jaarpremie",
       monthlyPremium: "Of per maand",
@@ -651,7 +712,21 @@ export const dictionary = {
         condition: "Voorwaarde",
         vehicleValue: "Waarde voertuig",
         omniumType: "Type omnium",
+        mopeds: "Bromfietsen",
+        allOtherCategories: "Alle andere categorieën",
+        vehicleAtRest: "Voertuig in rust (0.58%)",
+        miniOmnium25: "Mini-Omnium, 25+ jaar (0.83%)",
+        miniOmnium15_24: "Mini-Omnium, 15-24 jaar (1.18%)",
+        omniumPercentage25: "Omnium, 25+ jaar (% van waarde)",
+        omniumPercentage15_24: "Omnium, 15-24 jaar (% van waarde)",
+        omniumTable: "Standaard Omnium Tabel",
+        minPremiumApplied: "Minimumpremie toegepast",
+        percentage: "Percentage",
       },
+      notes: {
+        title: "Notities",
+        contactBrokerOmnium: "Voor voertuigen boven €150.000, neem contact op met de makelaar.",
+      }
     },
     contact: {
       firstName: "Voornaam",

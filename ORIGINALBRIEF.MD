@@ -57,6 +57,11 @@ Table Head: Name | Premier Véhicule | Supplémentaire(s)
 Row 1: Toutes Catégories | 17,00 €  | Gratuit
 Row 2: Cyclomoteurs | 12,00 € | Gratuit
 
+Title: PROTECTION DU CONDUCTEUR
+Text:
+- Formule Forfaitaire : Garanties Décès 12.500€ - Invalidité Permanente 25.000€ - Frais Médicaux 2.500€
+- Prime par véhicule voiture 9,00 €, Motos & Cyclomoteurs 12,00 €
+
 Title: OMNIUM
 Table Head: Valeur du véhicule | Premier véhicule | Deuxième véhicule | + 2 véhicules
 Row 1: De 1 € à 10.000 € | 175 € | 175 € | 175 €
@@ -85,5 +90,8 @@ Véhicule au repos :
 - apd de 15 ans = 0,58 % de la valeur d’expertise (*)
 (*)Prime minimale = € 175,00 – Prime minimale pour les deux
 roues = 135 EUR
+
+La franchise d’application pour la garantie dégâts matériels et vandalisme s’élève à 2,5% de la valeur assurée avec un minimum de 250 EUR et un
+maximum de 1.250 EUR
 
 Title: Des questions ? Text: Plus qu’un seul et unique numéro de téléphone 02 377 13 46 ou via email contact@fr.behva-insurance.be Ce dépliant se veut purement informatif. Les montants repris dans ce dépliant sont à titre indicatif et peuvent être modifiés à tout moment. Pour connaître de façon précise les conditions d’octroi des diverses garanties, contactez le courtier GEXIA SRL. BEHVA Insurance est une marque commerciale distribuée par GEXIA SRL (courtier en assurances et crédits à la consommation) Esplanade 1/51, 1020 Bruxelles – FSMA 0801.562.963 – tel : 02/377.13.46 – email : contact@fr.behva-insurance.be

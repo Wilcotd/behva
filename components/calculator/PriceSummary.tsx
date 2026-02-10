@@ -15,7 +15,7 @@ export function PriceSummary({ form }: PriceSummaryProps) {
   // Watch all fields to update price in real-time
   const values = form.watch();
   
-  let premium: PremiumBreakdown = { annual: 0, monthly: 0, breakdown: [], notes: [], details: { rc: {}, omnium: {} } };
+  let premium: PremiumBreakdown = { annual: 0, monthly: 0, breakdown: [], notes: [], details: { rc: {}, omnium: {}, legalProtection: {} } };
   try {
     premium = calculatePremium(values);
   } catch (error) {
@@ -92,9 +92,30 @@ export function PriceSummary({ form }: PriceSummaryProps) {
                     <div className="font-semibold text-foreground mb-1">{t.coverages.omnium.label}</div>
                     <div>{t.summary.details.vehicleValue}: {premium.details.omnium.vehicleValue} €</div>
                     <div>{t.summary.details.omniumType}: {premium.details.omnium.omniumType}</div>
-                    <div className="font-medium mt-1">{t.summary.details.rule}: <span className="text-foreground">{premium.details.omnium.rule}</span></div>
+                    <div className="font-medium mt-1">{t.summary.details.rule}: <span className="text-foreground">{resolveLabel(premium.details.omnium.rule)}</span></div>
+                    {premium.details.omnium.percentage && <div className="font-medium">{t.summary.details.percentage}: <span className="text-foreground">{premium.details.omnium.percentage}%</span></div>}
+                    {premium.details.omnium.minPremiumApplied && <div className="font-medium text-amber-600">{resolveLabel('summary.details.minPremiumApplied')}</div>}
                   </div>
                 )}
+                {premium.details.legalProtection && premium.details.legalProtection.base && (
+                  <div className="p-3 bg-muted/50 rounded-md">
+                    <div className="font-semibold text-foreground mb-1">{t.coverages.legalProtection.label}</div>
+                    {premium.details.legalProtection.rule && <div className="font-medium mt-1">{t.summary.details.rule}: <span className="text-foreground">{resolveLabel(premium.details.legalProtection.rule)}</span></div>}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {premium.notes && premium.notes.length > 0 && (
+            <div className="space-y-2 pt-4">
+              <div className="text-xs font-heading font-semibold mb-3 text-muted-foreground uppercase tracking-wider">
+                {t.summary.notes.title}
+              </div>
+              <div className="space-y-1 text-xs text-muted-foreground">
+                {premium.notes.map((note, index) => (
+                  <div key={index}>{resolveLabel(note)}</div>
+                ))}
               </div>
             </div>
           )}

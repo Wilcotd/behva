@@ -24,9 +24,10 @@ import { useTranslation } from "@/components/LanguageProvider";
 
 interface StepProps {
   form: UseFormReturn<FormData>;
+  goToStep: (step: number) => void;
 }
 
-export function Step4Summary({ form }: StepProps) {
+export function Step4Summary({ form, goToStep }: StepProps) {
   const { t } = useTranslation();
   const values = form.getValues();
   const premium = calculatePremium(values);
@@ -100,19 +101,64 @@ export function Step4Summary({ form }: StepProps) {
             <h4 className="text-sm font-semibold">
               {t.summary.vehicle}: {values.brand} {values.model}
             </h4>
-            <CollapsibleTrigger asChild>
-              <Button variant="ghost" size="sm" className="w-9 p-0">
-                {isOpen ? (
-                  <ChevronUp className="h-4 w-4" />
-                ) : (
-                  <ChevronDown className="h-4 w-4" />
-                )}
-                <span className="sr-only">Toggle</span>
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" size="sm" onClick={() => goToStep(0)}>
+                {t.common.edit}
               </Button>
-            </CollapsibleTrigger>
+              <CollapsibleTrigger asChild>
+                <Button variant="ghost" size="sm" className="w-9 p-0">
+                  {isOpen ? (
+                    <ChevronUp className="h-4 w-4" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4" />
+                  )}
+                  <span className="sr-only">Toggle</span>
+                </Button>
+              </CollapsibleTrigger>
+            </div>
           </div>
           <CollapsibleContent className="space-y-2 px-4 text-sm text-muted-foreground animate-in slide-in-from-top-2">
             <div className="grid grid-cols-2 gap-2">
+              <span>{t.fields.userStatus.label}:</span>
+              <span className="font-medium text-foreground">
+                {values.userStatus ? t.fields.userStatus.options[values.userStatus] : "-"}
+              </span>
+
+              {values.userStatus === "club_member" && (
+                <>
+                  <span>{t.fields.clubName.label}:</span>
+                  <span className="font-medium text-foreground">
+                    {values.clubName}
+                  </span>
+                  {values.clubName === "Autre club" && (
+                    <>
+                      <span>{t.fields.otherClub.label}:</span>
+                      <span className="font-medium text-foreground">
+                        {values.otherClub}
+                      </span>
+                    </>
+                  )}
+                  <span>{t.fields.behvaRefNumber.label}:</span>
+                  <span className="font-medium text-foreground">
+                    {values.behvaRefNumber}
+                  </span>
+                </>
+              )}
+
+              <span>{t.fields.contractType.label}:</span>
+              <span className="font-medium text-foreground">
+                {values.contractType ? t.fields.contractType.options[values.contractType] : "-"}
+              </span>
+
+              {values.contractType === "change" && (
+                <>
+                  <span>{t.fields.vehicleOrContractNumber.label}:</span>
+                  <span className="font-medium text-foreground">
+                    {values.vehicleOrContractNumber}
+                  </span>
+                </>
+              )}
+
               <span>{t.summary.vehicle}:</span>
               <span className="font-medium text-foreground">
                 {t.options.vehicleTypes[values.vehicleType]}
@@ -127,9 +173,13 @@ export function Step4Summary({ form }: StepProps) {
               <span className="font-medium text-foreground">
                 {values.powerKw} kW
               </span>
-              <span>{t.summary.status}:</span>
+              <span>{t.fields.brand.label}:</span>
               <span className="font-medium text-foreground">
-                {values.userStatus ? t.fields.userStatus.options[values.userStatus] : "-"}
+                {values.brand}
+              </span>
+              <span>{t.fields.model.label}:</span>
+              <span className="font-medium text-foreground">
+                {values.model}
               </span>
             </div>
             <div className="pt-2">
@@ -174,7 +224,7 @@ export function Step4Summary({ form }: StepProps) {
                   <FormItem>
                     <FormLabel>{t.contact.firstName}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Jean" {...field} />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -187,7 +237,7 @@ export function Step4Summary({ form }: StepProps) {
                   <FormItem>
                     <FormLabel>{t.contact.lastName}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Dupont" {...field} />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -201,7 +251,6 @@ export function Step4Summary({ form }: StepProps) {
                     <FormLabel>{t.contact.email}</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="jean.dupont@example.com"
                         type="email"
                         {...field}
                       />
@@ -217,7 +266,7 @@ export function Step4Summary({ form }: StepProps) {
                   <FormItem>
                     <FormLabel>{t.contact.phone}</FormLabel>
                     <FormControl>
-                      <Input placeholder="+32 470 00 00 00" {...field} />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

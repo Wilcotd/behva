@@ -12,6 +12,7 @@ import { Step4Summary } from "./Step4Summary";
 import { PriceSummary } from "@/components/calculator/PriceSummary";
 import { Progress } from "@/components/ui/progress";
 import { Form } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/components/LanguageProvider";
 
@@ -121,6 +122,13 @@ export function Calculator({ searchParams }: CalculatorProps) {
     }
   };
 
+  const goToStep = (step: number) => {
+    if (step >= 0 && step < steps.length) {
+      setCurrentStep(step);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   const progress = ((currentStep + 1) / steps.length) * 100;
 
   return (
@@ -146,30 +154,30 @@ export function Calculator({ searchParams }: CalculatorProps) {
                 {currentStep === 0 && <Step1User form={form} />}
                 {currentStep === 1 && <Step2Vehicle form={form} />}
                 {currentStep === 2 && <Step3Coverages form={form} />}
-                {currentStep === 3 && <Step4Summary form={form} />}
+                {currentStep === 3 && <Step4Summary form={form} goToStep={goToStep} />}
               </Card>
 
               {currentStep < 3 && (
                 <div className="flex justify-between mt-6">
-                  <button
+                  <Button
                     type="button"
                     onClick={prevStep}
+                    variant="secondary"
                     className={cn(
-                      "px-6 py-2 rounded-md text-sm font-medium transition-colors",
                       currentStep === 0
                         ? "invisible"
-                        : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                        : ""
                     )}
                   >
                     {t.common.previous}
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     type="button"
                     onClick={nextStep}
-                    className="px-6 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 text-sm font-medium"
+                    variant="next"
                   >
                     {t.common.next}
-                  </button>
+                  </Button>
                 </div>
               )}
             </form>

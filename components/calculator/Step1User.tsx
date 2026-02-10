@@ -20,6 +20,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { config } from "@/lib/config";
 import { useTranslation } from "@/components/LanguageProvider";
+import { CheckCircle } from "lucide-react";
 
 interface StepProps {
   form: UseFormReturn<FormData>;
@@ -45,27 +46,30 @@ export function Step1User({ form }: StepProps) {
                 value={field.value}
                 className="flex flex-col sm:flex-row gap-4"
               >
-                <FormItem className="flex items-center space-x-3 space-y-0">
+                <FormItem className="flex-1">
                   <FormControl>
-                    <RadioGroupItem value="individual" />
+                    <RadioGroupItem value="individual" className="peer sr-only" />
                   </FormControl>
-                  <FormLabel className="font-normal font-weight-normal cursor-pointer">
+                  <FormLabel className="relative font-normal font-weight-normal cursor-pointer flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
+                    <CheckCircle className="absolute top-2 right-2 h-5 w-5 text-primary opacity-0 peer-data-[state=checked]:opacity-100 transition-opacity" />
                     {t.fields.userStatus.options.individual}
                   </FormLabel>
                 </FormItem>
-                <FormItem className="flex items-center space-x-3 space-y-0">
+                <FormItem className="flex-1">
                   <FormControl>
-                    <RadioGroupItem value="club_member" />
+                    <RadioGroupItem value="club_member" className="peer sr-only" />
                   </FormControl>
-                  <FormLabel className="font-normal font-weight-normal cursor-pointer">
+                  <FormLabel className="relative font-normal font-weight-normal cursor-pointer flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
+                    <CheckCircle className="absolute top-2 right-2 h-5 w-5 text-primary opacity-0 peer-data-[state=checked]:opacity-100 transition-opacity" />
                     {t.fields.userStatus.options.club_member}
                   </FormLabel>
                 </FormItem>
-                <FormItem className="flex items-center space-x-3 space-y-0">
+                <FormItem className="flex-1">
                   <FormControl>
-                    <RadioGroupItem value="supporter" />
+                    <RadioGroupItem value="supporter" className="peer sr-only" />
                   </FormControl>
-                  <FormLabel className="font-normal font-weight-normal cursor-pointer">
+                  <FormLabel className="relative font-normal font-weight-normal cursor-pointer flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
+                    <CheckCircle className="absolute top-2 right-2 h-5 w-5 text-primary opacity-0 peer-data-[state=checked]:opacity-100 transition-opacity" />
                     {t.fields.userStatus.options.supporter}
                   </FormLabel>
                 </FormItem>
@@ -159,19 +163,21 @@ export function Step1User({ form }: StepProps) {
                 value={field.value}
                 className="flex flex-col sm:flex-row gap-4"
               >
-                <FormItem className="flex items-center space-x-3 space-y-0">
+                <FormItem className="flex-1">
                   <FormControl>
-                    <RadioGroupItem value="new" />
+                    <RadioGroupItem value="new" className="peer sr-only" />
                   </FormControl>
-                  <FormLabel className="font-normal font-weight-normal cursor-pointer">
+                  <FormLabel className="relative font-normal font-weight-normal cursor-pointer flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
+                    <CheckCircle className="absolute top-2 right-2 h-5 w-5 text-primary opacity-0 peer-data-[state=checked]:opacity-100 transition-opacity" />
                     {t.fields.contractType.options.new}
                   </FormLabel>
                 </FormItem>
-                <FormItem className="flex items-center space-x-3 space-y-0">
+                <FormItem className="flex-1">
                   <FormControl>
-                    <RadioGroupItem value="change" />
+                    <RadioGroupItem value="change" className="peer sr-only" />
                   </FormControl>
-                  <FormLabel className="font-normal font-weight-normal cursor-pointer">
+                  <FormLabel className="relative font-normal font-weight-normal cursor-pointer flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
+                    <CheckCircle className="absolute top-2 right-2 h-5 w-5 text-primary opacity-0 peer-data-[state=checked]:opacity-100 transition-opacity" />
                     {t.fields.contractType.options.change}
                   </FormLabel>
                 </FormItem>

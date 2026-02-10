@@ -63,7 +63,11 @@ const COVERAGES = {
     CAT3: { first: 12, additional: 0 },
     OTHER: { first: 17, additional: 0 },
   },
-  driverProtection: 40, // Unchanged from previous assumption
+  driverProtection: {
+    car: 9,
+    motorcycle: 12,
+    moped: 12,
+  },
   omnium: {
     tiers: [
       { limit: 10000, premiums: { "1": 175, "2": 175, "3+": 175 } },
@@ -311,20 +315,109 @@ export function calculatePremium(data: Partial<FormData>) {
     // Legal Protection
     if (data.coverages.legalProtection) {
       let amount = 0;
+      details.legalProtection = {};
       if (category === 3) { // Mopeds
         amount = isFirst ? COVERAGES.legalProtection.CAT3.first : COVERAGES.legalProtection.CAT3.additional;
+        details.legalProtection.rule = "summary.details.mopeds";
       } else {
         amount = isFirst ? COVERAGES.legalProtection.OTHER.first : COVERAGES.legalProtection.OTHER.additional;
+        details.legalProtection.rule = "summary.details.allOtherCategories";
       }
+      details.legalProtection.base = amount;
       annualPremium += amount;
       breakdown.push({ label: "coverages.legalProtection.label", amount });
     }
 
     // Driver Protection
     if (data.coverages.driverProtection) {
-      const amount = COVERAGES.driverProtection;
-      annualPremium += amount;
-      breakdown.push({ label: "coverages.driverProtection.label", amount });
+      let amount = 0;
+      if (data.vehicleType === 'car' || data.vehicleType === 'van') {
+        amount = COVERAGES.driverProtection.car;
+      } else if (data.vehicleType === 'motorcycle') {
+        amount = COVERAGES.driverProtection.motorcycle;
+      } else if (data.vehicleType === 'moped') {
+        amount = COVERAGES.driverProtection.moped;
+      }
+
+      if (amount > 0) {
+        annualPremium += amount;
+        breakdown.push({ label: "coverages.driverProtection.label", amount });
+      }
+    }
+
+    // Omnium
+    if (data.coverages.omnium) {
+      const vehicleValue = data.vehicleValue || 0;
+      let omniumAmount = 0;
+      details.omnium = { vehicleValue };
+
+      if (data.registrationStatus === 'storage') {
+        // Véhicule au repos
+        if (vehicleAgeYears >= 15) {
+          omniumAmount = vehicleValue * 0.0058;
+          details.omnium.rule = "summary.details.vehicleAtRest";
+          details.omnium.percentage = 0.58;
+        }
+      } else if (data.coverages.omniumType === 'mini') {
+        // Mini-Omnium
+        if (vehicleAgeYears >= 25) {
+          omniumAmount = vehicleValue * 0.0083;
+          details.omnium.rule = "summary.details.miniOmnium25";
+          details.omnium.percentage = 0.83;
+        } else if (vehicleAgeYears >= 15) {
+          omniumAmount = vehicleValue * 0.0118;
+          details.omnium.rule = "summary.details.miniOmnium15_24";
+          details.omnium.percentage = 1.18;
+        }
+      } else {
+        // Full Omnium
+        if (vehicleValue > 50000) {
+          if (vehicleAgeYears >= 25) {
+            if (vehicleValue <= 75000) {
+              omniumAmount = vehicleValue * 0.0118;
+              details.omnium.percentage = 1.18;
+            } else if (vehicleValue <= 150000) {
+              omniumAmount = vehicleValue * 0.0098;
+              details.omnium.percentage = 0.98;
+            } else {
+              notes.push("summary.notes.contactBrokerOmnium");
+            }
+            details.omnium.rule = "summary.details.omniumPercentage25";
+          } else if (vehicleAgeYears >= 15) {
+            if (vehicleValue <= 75000) {
+              omniumAmount = vehicleValue * 0.0148;
+              details.omnium.percentage = 1.48;
+            } else if (vehicleValue <= 150000) {
+              omniumAmount = vehicleValue * 0.0138;
+              details.omnium.percentage = 1.38;
+            } else {
+              notes.push("summary.notes.contactBrokerOmnium");
+            }
+            details.omnium.rule = "summary.details.omniumPercentage15_24";
+          }
+        } else {
+          const tier = COVERAGES.omnium.tiers.find(t => vehicleValue <= t.limit);
+          if (tier) {
+            omniumAmount = tier.premiums[rank as "1" | "2" | "3+"];
+            details.omnium.rule = "summary.details.omniumTable";
+          }
+        }
+      }
+
+      // Minimum premium
+      const isTwoWheeler = data.vehicleType === 'motorcycle' || data.vehicleType === 'moped';
+      const minPremium = isTwoWheeler ? 135 : 175;
+      if (omniumAmount > 0 && omniumAmount < minPremium) {
+        omniumAmount = minPremium;
+        details.omnium.minPremiumApplied = true;
+      }
+      
+      details.omnium.base = omniumAmount;
+
+      if (omniumAmount > 0) {
+        annualPremium += omniumAmount;
+        breakdown.push({ label: "coverages.omnium.label", amount: omniumAmount });
+      }
     }
   }
 
