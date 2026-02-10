@@ -13,9 +13,11 @@ const CATEGORY_MAPPING: Record<string, 1 | 2 | 3 | 4 | 5> = {
   motorcycle: 1,
   van: 1,
   truck: 2,
+  bus: 2,
   moped: 3,
   tractor: 4,
   trailer: 5,
+  caravan: 5,
 };
 
 type AgeGroup = "group1" | "group2" | "group3";
@@ -98,8 +100,8 @@ function getAgeGroup(age: number, category: 1 | 2 | 3 | 4 | 5): AgeGroup | null 
     return null; // < 25 not covered?
   }
   
-  if (category === 5) { // Trailers
-    if (age >= 25) return "group2"; // Cheaper
+  if (category === 5) { // Trailers & Caravans
+    if (age >= 25) return "group2";
     if (age >= 15) return "group1";
     return null;
   }
@@ -114,19 +116,29 @@ function getVehicleCategory(type: string): 1 | 2 | 3 | 4 | 5 {
 export function calculatePremium(data: Partial<FormData>) {
   let annualPremium = 0;
   const breakdown: { label: string; amount: number }[] = [];
+  const notes: string[] = [];
+  const details: any = {
+    rc: {},
+    omnium: {},
+  };
 
   if (!data.vehicleType || !data.firstRegistrationDate) {
-    return { annual: 0, monthly: 0, breakdown: [] };
+    return { annual: 0, monthly: 0, breakdown: [], details: {} };
   }
 
   const category = getVehicleCategory(data.vehicleType);
   const vehicleAgeYears = getVehicleAge(data.firstRegistrationDate);
   const ageGroup = getAgeGroup(vehicleAgeYears, category);
   
+  details.rc.category = category;
+  details.rc.ageGroup = ageGroup;
+  details.rc.vehicleAge = vehicleAgeYears;
+
   console.log(`[Pricing] Category: CAT ${category}, Age Group: ${ageGroup}, Age: ${vehicleAgeYears} years`);
 
   const rank = data.vehicleRank || "1";
   const isFirst = rank === "1";
+  details.rc.rank = rank;
 
   // 1. Base RC Premium
   let rcAmount = 0;
@@ -134,46 +146,65 @@ export function calculatePremium(data: Partial<FormData>) {
   if (!ageGroup) {
     // TODO: Handle too young vehicles gracefully? For now 0.
     rcAmount = 0;
+    notes.push("Vehicle is too young for RC coverage.");
   } else {
     if (category === 1) {
       if (ageGroup === "group3") {
+        details.rc.rule = "CAT 1, Group 3 (15-24 years)";
         // Special logic for CAT 1 Group 3 (15-24y)
         if (data.vehicleType === "motorcycle") {
           rcAmount = 167; // Fixed for Moto
+          details.rc.base = 167;
+          details.rc.condition = "Motorcycle";
         } else {
           // Car/Van
           const power = data.powerKw || 0;
+          details.rc.power = power;
           if (power <= 140) {
             rcAmount = 214;
+            details.rc.base = 214;
+            details.rc.condition = "Power <= 140 kW";
           } else {
             rcAmount = 264;
+            details.rc.base = 264;
+            details.rc.condition = "Power > 140 kW";
           }
         }
       } else {
         // Group 1 & 2
         const rates = BASE_PREMIUMS.CAT1[ageGroup];
         rcAmount = isFirst ? rates.first : rates.additional;
+        details.rc.base = rcAmount;
+        details.rc.rule = `CAT 1, Group ${ageGroup === 'group1' ? '1 (40+)' : '2 (25-39)'}`;
       }
     } else if (category === 2) {
       const rates = BASE_PREMIUMS.CAT2[ageGroup];
       rcAmount = isFirst ? rates.first : rates.additional;
+      details.rc.base = rcAmount;
+      details.rc.rule = `CAT 2, Group ${ageGroup}`;
     } else if (category === 3) {
       if (ageGroup === "group1") {
         const rates = BASE_PREMIUMS.CAT3.group1;
         rcAmount = isFirst ? rates.first : rates.additional;
+        details.rc.base = rcAmount;
+        details.rc.rule = `CAT 3, Group 1 (15+)`;
       }
     } else if (category === 4) {
       // Tractors: Group 1 or 2
       if (ageGroup === "group1" || ageGroup === "group2") {
         const rates = BASE_PREMIUMS.CAT4[ageGroup];
         rcAmount = isFirst ? rates.first : rates.additional;
+        details.rc.base = rcAmount;
+        details.rc.rule = `CAT 4, Group ${ageGroup === 'group1' ? '1 (40+)' : '2 (25-39)'}`;
       }
     } else if (category === 5) {
-      // Trailers: Group 1 or 2 (Fixed, no first/additional distinction in simple table? 
-      // Doc says "Full Club Member" and gives 1 price. 
-      // But let's assume it applies to everyone or handles surcharge separately.
+      // Trailers & Caravans: Group 1 or 2
+      // Note: For CAT 5, Rank is NOT checked (same price for first/additional).
       if (ageGroup === "group2") rcAmount = BASE_PREMIUMS.CAT5.group2;
       else if (ageGroup === "group1") rcAmount = BASE_PREMIUMS.CAT5.group1;
+      details.rc.base = rcAmount;
+      details.rc.rule = `CAT 5, Group ${ageGroup === 'group1' ? '1 (15-24)' : '2 (25+)'}`;
+      details.rc.rank = "not_applicable";
     }
   }
 
@@ -295,34 +326,13 @@ export function calculatePremium(data: Partial<FormData>) {
       annualPremium += amount;
       breakdown.push({ label: "coverages.driverProtection.label", amount });
     }
-
-    // Omnium
-    if (data.coverages.omnium && data.vehicleValue) {
-      const value = data.vehicleValue;
-      const tier = COVERAGES.omnium.tiers.find(t => value <= t.limit);
-      const amount = tier ? tier.premiums[rank] : 0; 
-      if (amount > 0) {
-        annualPremium += amount;
-        breakdown.push({ label: "coverages.omnium.label", amount });
-      }
-    }
-    
-    // Fire/Theft (Legacy/Placeholder?) - Not in 2026 doc?
-    // "Incendie / Vol au repos" -> Not explicitly in the doc snippet.
-    // I will keep it as is (80 EUR) or remove if unsure. 
-    // Doc says "Omnium... Covers material damage".
-    // I'll leave it but maybe warn or set to 0? 
-    // Previous code had 80. I'll keep it for now to avoid breaking existing features if not requested.
-    if (data.coverages.fireTheftResting) {
-       const amount = 80; 
-       annualPremium += amount;
-       breakdown.push({ label: "coverages.fireTheftResting.label", amount });
-    }
   }
 
   return {
     annual: Math.round(annualPremium * 100) / 100,
     monthly: Math.round((annualPremium / 12) * 100) / 100,
     breakdown,
+    notes,
+    details,
   };
 }

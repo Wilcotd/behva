@@ -96,7 +96,7 @@ export const dictionary = {
         label: "Est-ce le 1er véhicule assuré ?",
       },
       vehicleRank: {
-        label: "Rang du véhicule",
+        label: "Nombre de véhicules assurés",
         placeholder: "Sélectionner le rang",
       },
     },
@@ -113,6 +113,10 @@ export const dictionary = {
       omnium: {
         label: "Omnium complète",
         description: "Couvre les dégâts matériels à votre propre véhicule.",
+      },
+      omniumType: {
+        full: "Omnium Complète",
+        mini: "Mini-Omnium",
       },
       assistance: {
         label: "Assistance",
@@ -157,6 +161,21 @@ export const dictionary = {
       notMember: "Non membre",
       coveragesChosen: "Garanties choisies",
       memberDiscount: "Réduction membre",
+      calculationDetails: "Détails du calcul",
+      details: {
+        category: "Catégorie",
+        vehicleAge: "Âge du véhicule",
+        years: "ans",
+        ageGroup: "Groupe d'âge",
+        rank: "Rang",
+        firstVehicle: "1er véhicule",
+        additionalVehicle: "Véhicule supplémentaire",
+        power: "Puissance",
+        rule: "Règle appliquée",
+        condition: "Condition",
+        vehicleValue: "Valeur du véhicule",
+        omniumType: "Type d'omnium",
+      },
     },
     contact: {
       firstName: "Prénom",
@@ -191,7 +210,9 @@ export const dictionary = {
         van: "Camionnette",
         tractor: "Tracteur",
         truck: "Camion",
+        bus: "Autobus",
         trailer: "Remorque",
+        caravan: "Caravane",
         moped: "Cyclomoteur",
       },
       registrationStatuses: {
@@ -313,7 +334,7 @@ export const dictionary = {
         label: "Is this the 1st insured vehicle?",
       },
       vehicleRank: {
-        label: "Vehicle Rank",
+        label: "Number of insured vehicles",
         placeholder: "Select rank",
       },
     },
@@ -330,6 +351,10 @@ export const dictionary = {
       omnium: {
         label: "Full Omnium",
         description: "Covers material damage to your own vehicle.",
+      },
+      omniumType: {
+        full: "Full Omnium",
+        mini: "Mini-Omnium",
       },
       assistance: {
         label: "Assistance",
@@ -374,6 +399,21 @@ export const dictionary = {
       notMember: "Non-member",
       coveragesChosen: "Chosen Coverages",
       memberDiscount: "Member Discount",
+      calculationDetails: "Calculation Details",
+      details: {
+        category: "Category",
+        vehicleAge: "Vehicle Age",
+        years: "years",
+        ageGroup: "Age Group",
+        rank: "Rank",
+        firstVehicle: "1st Vehicle",
+        additionalVehicle: "Additional Vehicle",
+        power: "Power",
+        rule: "Applied Rule",
+        condition: "Condition",
+        vehicleValue: "Vehicle Value",
+        omniumType: "Omnium Type",
+      },
     },
     contact: {
       firstName: "First Name",
@@ -408,7 +448,9 @@ export const dictionary = {
         van: "Van",
         tractor: "Tractor",
         truck: "Truck",
+        bus: "Bus",
         trailer: "Trailer",
+        caravan: "Caravan",
         moped: "Moped",
       },
       registrationStatuses: {
@@ -530,7 +572,7 @@ export const dictionary = {
         label: "Is dit het 1ste verzekerde voertuig?",
       },
       vehicleRank: {
-        label: "Rang van het voertuig",
+        label: "Aantal verzekerde voertuigen",
         placeholder: "Selecteer rang",
       },
     },
@@ -547,6 +589,10 @@ export const dictionary = {
       omnium: {
         label: "Volledige Omnium",
         description: "Dekt materiële schade aan uw eigen voertuig.",
+      },
+      omniumType: {
+        full: "Volledige Omnium",
+        mini: "Mini-Omnium",
       },
       assistance: {
         label: "Bijstand",
@@ -591,6 +637,21 @@ export const dictionary = {
       notMember: "Geen lid",
       coveragesChosen: "Gekozen waarborgen",
       memberDiscount: "Ledenkorting",
+      calculationDetails: "Berekeningsdetails",
+      details: {
+        category: "Categorie",
+        vehicleAge: "Leeftijd voertuig",
+        years: "jaar",
+        ageGroup: "Leeftijdsgroep",
+        rank: "Rang",
+        firstVehicle: "1ste Voertuig",
+        additionalVehicle: "Extra Voertuig",
+        power: "Vermogen",
+        rule: "Toegepaste Regel",
+        condition: "Voorwaarde",
+        vehicleValue: "Waarde voertuig",
+        omniumType: "Type omnium",
+      },
     },
     contact: {
       firstName: "Voornaam",
@@ -625,7 +686,9 @@ export const dictionary = {
         van: "Bestelwagen",
         tractor: "Tractor",
         truck: "Vrachtwagen",
+        bus: "Bus",
         trailer: "Aanhangwagen",
+        caravan: "Caravan",
         moped: "Bromfiets",
       },
       registrationStatuses: {

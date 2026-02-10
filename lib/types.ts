@@ -7,7 +7,9 @@ export const vehicleTypes = [
   "van",
   "tractor",
   "truck",
+  "bus",
   "trailer",
+  "caravan",
   "moped",
 ] as const;
 
@@ -80,6 +82,7 @@ export const createFormSchema = (t: Dictionary) => z.object({
   coverages: z.object({
     rc: z.boolean().default(true),
     omnium: z.boolean().default(false),
+    omniumType: z.enum(["full", "mini"]).default("full"),
     assistance: z.boolean().default(true),
     legalProtection: z.boolean().default(false),
     driverProtection: z.boolean().default(false),
@@ -97,6 +100,26 @@ export const createFormSchema = (t: Dictionary) => z.object({
 export type FormSchemaType = ReturnType<typeof createFormSchema>;
 export type FormData = z.infer<FormSchemaType>;
 
+export interface PremiumBreakdown {
+  annual: number;
+  monthly: number;
+  breakdown: { label: string; amount: number }[];
+  notes: string[];
+  details: {
+    rc?: {
+      category?: number;
+      ageGroup?: string;
+      vehicleAge?: number;
+      rank?: string;
+      rule?: string;
+      base?: number;
+      condition?: string;
+      power?: number;
+    };
+    omnium?: any;
+  };
+}
+
 export const defaultValues: Partial<FormData> = {
   userStatus: "individual",
   contractType: "new",
@@ -106,6 +129,7 @@ export const defaultValues: Partial<FormData> = {
   coverages: {
     rc: true,
     omnium: false,
+    omniumType: "full",
     assistance: true,
     legalProtection: false,
     driverProtection: false,

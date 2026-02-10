@@ -1,7 +1,7 @@
 "use client";
 
 import { UseFormReturn } from "react-hook-form";
-import { FormData } from "@/lib/types";
+import { FormData, PremiumBreakdown } from "@/lib/types";
 import { Card, CardContent } from "@/components/ui/card";
 import { calculatePremium } from "@/lib/pricing";
 import { useTranslation } from "@/components/LanguageProvider";
@@ -15,7 +15,7 @@ export function PriceSummary({ form }: PriceSummaryProps) {
   // Watch all fields to update price in real-time
   const values = form.watch();
   
-  let premium = { annual: 0, monthly: 0, breakdown: [] as any[] };
+  let premium: PremiumBreakdown = { annual: 0, monthly: 0, breakdown: [], notes: [], details: { rc: {}, omnium: {} } };
   try {
     premium = calculatePremium(values);
   } catch (error) {
@@ -68,6 +68,36 @@ export function PriceSummary({ form }: PriceSummaryProps) {
               ))}
             </div>
           </div>
+
+          {premium.details && (
+            <div className="space-y-2 pt-4">
+              <div className="text-xs font-heading font-semibold mb-3 text-muted-foreground uppercase tracking-wider">
+                {t.summary.calculationDetails}
+              </div>
+              <div className="space-y-3 text-xs text-muted-foreground">
+                {premium.details.rc && premium.details.rc.base && (
+                  <div className="p-3 bg-muted/50 rounded-md">
+                    <div className="font-semibold text-foreground mb-1">{t.coverages.rc.label}</div>
+                    <div>{t.summary.details.category}: {premium.details.rc.category}</div>
+                    <div>{t.summary.details.vehicleAge}: {premium.details.rc.vehicleAge} {t.summary.details.years}</div>
+                    <div>{t.summary.details.ageGroup}: {premium.details.rc.ageGroup}</div>
+                    <div>{t.summary.details.rank}: {premium.details.rc.rank === '1' ? t.summary.details.firstVehicle : t.summary.details.additionalVehicle}</div>
+                    {premium.details.rc.power && <div>{t.summary.details.power}: {premium.details.rc.power} kW</div>}
+                    <div className="font-medium mt-1">{t.summary.details.rule}: <span className="text-foreground">{premium.details.rc.rule}</span></div>
+                    {premium.details.rc.condition && <div className="font-medium">{t.summary.details.condition}: <span className="text-foreground">{premium.details.rc.condition}</span></div>}
+                  </div>
+                )}
+                {premium.details.omnium && premium.details.omnium.base && (
+                  <div className="p-3 bg-muted/50 rounded-md">
+                    <div className="font-semibold text-foreground mb-1">{t.coverages.omnium.label}</div>
+                    <div>{t.summary.details.vehicleValue}: {premium.details.omnium.vehicleValue} €</div>
+                    <div>{t.summary.details.omniumType}: {premium.details.omnium.omniumType}</div>
+                    <div className="font-medium mt-1">{t.summary.details.rule}: <span className="text-foreground">{premium.details.omnium.rule}</span></div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           <div className="pt-4 text-xs text-muted-foreground italic text-center">
             {t.summary.disclaimer}

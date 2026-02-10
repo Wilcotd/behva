@@ -1,11 +1,3 @@
-Help me to write a prompt, I have existing app build with AI too with react, next project. the client provide a doc I'll write below. The goal is to analise the existing and match with the new document.
-
-Please analyse and let me know if any new field need and any filled is not used anymore:
-
-FYI client use fr language, but please use english
-
-write prompt on single file!
-
 Client doc:
 Headline: GRILLE TARIFAIRE « BEHVA INSURANCE » - 2026
 Subheadline: Nouvelle échéance → Echéance annuelle = prise d’effet du contrat
@@ -72,5 +64,26 @@ Row 2: De 10.001 € à 20.000€ | 230 € | 175 € | 175 €
 Row 3: De 20.001 € à 30.000€ | 330 € | 235 € | 175 €
 Row 4: De 30.001€ à 40.000€ | 430 € | 335 € | 175 €
 Row 5: De 40.001 € à 50.000€ | 530 € | 435 € | 175 €
+
+Text:
+Si valeur assurée pour les véhicules de +25 ans d’âge est :
+– entre 50.001 EUR et 75.000 EUR = 1,18 % de la valeur
+d’expertise (*)
+– entre 75.001 EUR et 150.000 EUR = 0,98 % de la valeur
+d’expertise (*)
+– Au-delà 150.000 EUR = contacter le courtier (*)
+Si la valeur assurée pour les véhicules de 15-24 ans d’âge est :
+– entre 50.001 EUR et 75.000 EUR = 1,48 % de la valeur
+d’expertise (*)
+– entre 75.001 EUR et 150.000 EUR = 1,38 % de la valeur
+d’expertise (*)
+– Au-delà 150.000 EUR = contacter le courtier (*)
+Mini-Omnium:
+- apd de 25 ans = 0,83 % de la valeur d’expertise
+- 15 - 24 ans = 1,18 % de la valeur d’expertise
+Véhicule au repos :
+- apd de 15 ans = 0,58 % de la valeur d’expertise (*)
+(*)Prime minimale = € 175,00 – Prime minimale pour les deux
+roues = 135 EUR
 
 Title: Des questions ? Text: Plus qu’un seul et unique numéro de téléphone 02 377 13 46 ou via email contact@fr.behva-insurance.be Ce dépliant se veut purement informatif. Les montants repris dans ce dépliant sont à titre indicatif et peuvent être modifiés à tout moment. Pour connaître de façon précise les conditions d’octroi des diverses garanties, contactez le courtier GEXIA SRL. BEHVA Insurance est une marque commerciale distribuée par GEXIA SRL (courtier en assurances et crédits à la consommation) Esplanade 1/51, 1020 Bruxelles – FSMA 0801.562.963 – tel : 02/377.13.46 – email : contact@fr.behva-insurance.be

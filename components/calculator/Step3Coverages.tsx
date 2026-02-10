@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
 import { AlertCircle } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useTranslation } from "@/components/LanguageProvider";
 
 interface StepProps {
@@ -84,23 +85,56 @@ export function Step3Coverages({ form }: StepProps) {
           name="coverages.omnium"
           render={({ field }) => (
             <FormItem
-              className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 hover:bg-muted/50 transition-colors cursor-pointer"
-              // onClick={handleCardClick}
+              className="flex flex-col space-y-4 rounded-md border p-4 hover:bg-muted/50 transition-colors"
             >
-              <FormControl>
-                <Checkbox
-                  checked={!!field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-              <div className="space-y-1 leading-none">
-                <FormLabel>
-                  {t.coverages.omnium.label}
-                </FormLabel>
-                <FormDescription>
-                  {t.coverages.omnium.description}
-                </FormDescription>
+              <div className="flex flex-row items-start space-x-3 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={!!field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>
+                    {t.coverages.omnium.label}
+                  </FormLabel>
+                  <FormDescription>
+                    {t.coverages.omnium.description}
+                  </FormDescription>
+                </div>
               </div>
+              {omniumSelected && (
+                <div className="pl-6 pt-2">
+                  <FormField
+                    control={form.control}
+                    name="coverages.omniumType"
+                    render={({ field }) => (
+                      <RadioGroup
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        className="flex flex-col space-y-2"
+                      >
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value="full" />
+                          </FormControl>
+                          <FormLabel className="font-normal">
+                            {t.coverages.omniumType.full}
+                          </FormLabel>
+                        </FormItem>
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value="mini" />
+                          </FormControl>
+                          <FormLabel className="font-normal">
+                            {t.coverages.omniumType.mini}
+                          </FormLabel>
+                        </FormItem>
+                      </RadioGroup>
+                    )}
+                  />
+                </div>
+              )}
             </FormItem>
           )}
         />
@@ -229,7 +263,6 @@ export function Step3Coverages({ form }: StepProps) {
           render={({ field }) => (
             <FormItem
               className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 hover:bg-muted/50 transition-colors cursor-pointer"
-              // onClick={handleCardClick}
             >
               <FormControl>
                 <Checkbox
@@ -243,33 +276,6 @@ export function Step3Coverages({ form }: StepProps) {
                 </FormLabel>
                 <FormDescription>
                   {t.coverages.fireTheftResting.description}
-                </FormDescription>
-              </div>
-            </FormItem>
-          )}
-        />
-
-        {/* Assistance Plus */}
-        <FormField
-          control={form.control}
-          name="coverages.assistancePlus"
-          render={({ field }) => (
-            <FormItem
-              className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 hover:bg-muted/50 transition-colors cursor-pointer"
-              // onClick={handleCardClick}
-            >
-              <FormControl>
-                <Checkbox
-                  checked={!!field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-              <div className="space-y-1 leading-none">
-                <FormLabel>
-                  {t.coverages.assistancePlus.label}
-                </FormLabel>
-                <FormDescription>
-                  {t.coverages.assistancePlus.description}
                 </FormDescription>
               </div>
             </FormItem>
