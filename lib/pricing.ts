@@ -127,7 +127,7 @@ export function calculatePremium(data: Partial<FormData>) {
   };
 
   if (!data.vehicleType || !data.firstRegistrationDate) {
-    return { annual: 0, monthly: 0, breakdown: [], details: {} };
+    return { annual: 0, monthly: 0, breakdown: [], details: {}, notes: [] };
   }
 
   const category = getVehicleCategory(data.vehicleType);
